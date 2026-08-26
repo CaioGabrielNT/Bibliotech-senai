@@ -3,9 +3,9 @@ import * as clienteService from '../services/cliente.service';
 
 
 export async function criar(req: Request, res: Response): Promise<void> {
-  const { nome, cpf, email, telefone,matricula } = req.body;
+  const { nome, email, telefone,matricula } = req.body;
 
-  const cliente = await clienteService.CriarCliente({ nome, cpf, email, telefone, matricula });
+  const cliente = await clienteService.CriarCliente({ nome, email, telefone, matricula });
 
 
   res.status(201).json(cliente);

@@ -8,12 +8,13 @@ interface TokenPayload {
 }
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
-  
   const authHeader = req.headers.authorization;
 
-  if (!authHeader){
-    throw new AppError ('Token ão fornecido.',401);
+  if (!authHeader) {
+    throw new AppError('Token não fornecido.', 401);
   }
+
+  const partes = authHeader.split(' '); 
 
   if (partes.length !== 2 || partes[0] !== 'Bearer') {
     throw new AppError('Token mal formatado. Utilize o formato: Bearer <token>.', 401);
@@ -28,5 +29,5 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
     throw new AppError('Token inválido ou expirado.', 401);
   }
 
-  next();
+  next(); 
 }

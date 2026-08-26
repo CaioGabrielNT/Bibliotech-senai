@@ -5,7 +5,6 @@ import { AppError } from '../middlewares/error.middleware';
 const SELECT_CLIENTE_PUBLICO = {
     id: true,
     nome: true,
-    cpf: true,
     email: true,
     telefone: true,
     criadoEm: true
@@ -13,7 +12,6 @@ const SELECT_CLIENTE_PUBLICO = {
 
 interface CriarClienteInput {
     nome: string,
-    cpf: string,
     email: string,
     telefone: string,
     matricula:string

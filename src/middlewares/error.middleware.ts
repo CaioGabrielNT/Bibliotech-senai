@@ -12,32 +12,28 @@ export class AppError extends Error {
     }
 }
     export function errorHandler(
-        err: Error,
-        req: Request,
-        res: Response,
-        next: NextFunction,
-     ): void{
+  err: Error,
+  _req: Request,
+  res: Response,
+  _next: NextFunction,
+): void {
 
-        if(err instanceof AppError){
-            res.status(err.statusCode).json({erro: err.message})
-        }
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json({ erro: err.message });
+    return; // <-- faltava
+  }
 
-        if (err instanceof PrismaClientKnownRequestError)
-        {
+  if (err instanceof PrismaClientKnownRequestError) {
+    if (err.code === 'P2002') { 
+      res.status(409).json({ erro: 'Já existe registro com um valor único em conflito' });
+      return;
+    }
+    if (err.code === 'P2025') { 
+      res.status(404).json({ erro: 'Registro não encontrado.' });
+      return;
+    }
+  }
 
-            if (err.code === 'p2002'){
-                res.status(409).json({
-                erro:'Já existe registro com um valor unico em conflito'
-            })
-            return;
-        }   
-        
-        if(err.code === 'p2025') {
-            res.status(404).json({erro: 'Registro não encontrado.'})
-            return;
-        }
-     }
-     
-     console.error(err)
-     res.status(500).json({erro: 'Erro interno do servidor.'})
-}    
+  console.error(err);
+  res.status(500).json({ erro: 'Erro interno do servidor.' });
+}

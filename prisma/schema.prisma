@@ -2,44 +2,57 @@ generator client {
     provider = "prisma-client-js"
 }
 
-datasource db{
+datasource db {
     provider = "sqlite"
     url = env("DATABASE_URL")
 }
 
 model Leitor {
-    id Int @id @default(autoincrement())
-    nome String
-    telefone String @unique
-    email String @unique
-    matricula String @unique
+    id        Int      @id @default(autoincrement())
+    nome      String
+    telefone  String   @unique
+    email     String   @unique
+    matricula String   @unique
 
-    criadoEm DateTime @default(now())
+    criadoEm  DateTime @default(now())
 
     @@map("leitor")
 }
-model CategoriaLivro {
-  id            Int   @id @default(autoincrement())
-  nomeCategoria String
-  valorDiaria   Float
-  valorCaucao   Float
 
-  livro livros[]
+model Bibliotecario {
+    id    Int    @id @default(autoincrement())
+    nome  String
+    email String @unique
+    senha String
 
-  @@map("categorias_livros")
+    @@map("bibliotecarios")
 }
 
-model Livros {
-  id          Int @id @default(autoincrement())
-  categoriaId Int
+model CategoriaLivro {
+    id            Int    @id @default(autoincrement())
+    nomeCategoria String
+    valorMultaDia Float
+    valorCaucao   Float
 
-  categoria CategoriaLivros @relation(fields: [categoriaId], references: [id])
+    livros Livro[]
 
-  placa  String @unique
-  modelo String
-  ano    Int
+    @@map("categorias_livros")
+}
 
-  statusDisponibilidade String @default("Disponivel")
+model Livro {
+    id          Int @id @default(autoincrement())
+    categoriaId Int
+    categoria   CategoriaLivro @relation(fields: [categoriaId], references: [id])
 
-  @@map("livros")
+    codigo  String @unique
+    titulo  String
+    autor   String
+    editora String
+    genero  String
+    ano     Int
+
+    estadoConservacao      String @default("Bom")
+    statusDisponibilidade  String @default("Disponivel")
+
+    @@map("livros")
 }

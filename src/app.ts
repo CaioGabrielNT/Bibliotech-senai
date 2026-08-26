@@ -12,7 +12,7 @@ app.use(express.json())
 
 app.use('/api', routes);
 
-app.get("/hello", (reg, res) => {
+app.get("/hello", (_req, res) => {
    res.json({ mensagem: 'Bibliotech API está no ar!' });
 });
 
