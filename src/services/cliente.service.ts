@@ -15,17 +15,34 @@ interface CriarClienteInput {
     nome: string,
     cpf: string,
     email: string,
-    senha: string,
-    telefone: string
+    telefone: string,
+    matricula:string
 }
 
 export async function CriarCliente(dados: CriarClienteInput){
-    const senhaHash = await bcrypt.hash(dados.senha, 10)
 
-    const clienteCriado = await prisma.cliente.create({
-        data: {...dados, senha: senhaHash},
+    const clienteCriado = await prisma.leitor.create({
+        data: {...dados},
         select: SELECT_CLIENTE_PUBLICO
     })
     
     return clienteCriado;
+}
+
+export async function listarClientes() {
+    return prisma.leitor.findMany({
+        select: SELECT_CLIENTE_PUBLICO,
+        orderBy: {id: 'asc'},
+    });
+}
+
+export async function buscarClientePorId(id: number){
+    const cliente = await prisma.leitor.findUnique({
+        where: {id},
+        select: SELECT_CLIENTE_PUBLICO,
+    });
+    if (!cliente) {
+        throw new AppError('Cliente não encontrado. ',404);
+    }
+    return cliente
 }

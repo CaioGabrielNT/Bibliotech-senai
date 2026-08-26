@@ -18,3 +18,28 @@ model Leitor {
 
     @@map("leitor")
 }
+model CategoriaLivro {
+  id            Int   @id @default(autoincrement())
+  nomeCategoria String
+  valorDiaria   Float
+  valorCaucao   Float
+
+  livro livros[]
+
+  @@map("categorias_livros")
+}
+
+model Livros {
+  id          Int @id @default(autoincrement())
+  categoriaId Int
+
+  categoria CategoriaLivros @relation(fields: [categoriaId], references: [id])
+
+  placa  String @unique
+  modelo String
+  ano    Int
+
+  statusDisponibilidade String @default("Disponivel")
+
+  @@map("livros")
+}
